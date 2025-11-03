@@ -17,7 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 public final class EditLinkRedirectLimit implements Command<LinkDto> {
 
     public static final String KEY_TOKEN = "edit_limit";
+    public static final String EXAMPLE_MESSAGE =
+            KEY_TOKEN + Cli.SHORTENED_URL_PREFIX + "AQA -url https://skillfactory.ru";
     public static final String SUCCESS_MESSAGE = "Redirect limit successfully changed!";
+    public static final String DESCRIPTION_MESSAGE = "Edit active link redirect limit.";
     private final UserService userService;
     private final LinkService linkService;
 
@@ -60,11 +63,11 @@ public final class EditLinkRedirectLimit implements Command<LinkDto> {
 
     @Override
     public String description() {
-        return "Edit active link redirect limit.";
+        return DESCRIPTION_MESSAGE;
     }
 
     @Override
     public String example() {
-        return KEY_TOKEN + Cli.SHORTENED_URL_PREFIX + "AQA -url https://skillfactory.ru";
+        return EXAMPLE_MESSAGE;
     }
 }

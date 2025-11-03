@@ -17,7 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 public final class EditLinkUrl implements Command<LinkDto> {
 
     public static final String KEY_TOKEN = "edit_url";
+    public static final String EXAMPLE_MESSAGE =
+            KEY_TOKEN + Cli.SHORTENED_URL_PREFIX + "AQA -url https://skillfactory.ru";
     public static final String SUCCESS_MESSAGE = "URL successfully changed!";
+    public static final String DESCRIPTION_MESSAGE = "Edit active link URL";
     private final UserService userService;
     private final LinkService linkService;
 
@@ -56,11 +59,11 @@ public final class EditLinkUrl implements Command<LinkDto> {
 
     @Override
     public String description() {
-        return "Edit active link URL";
+        return DESCRIPTION_MESSAGE;
     }
 
     @Override
     public String example() {
-        return KEY_TOKEN + Cli.SHORTENED_URL_PREFIX + "AQA -url https://skillfactory.ru";
+        return EXAMPLE_MESSAGE;
     }
 }

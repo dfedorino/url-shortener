@@ -4,7 +4,7 @@ import com.dfedorino.urlshortener.service.business.LinkService;
 import com.dfedorino.urlshortener.service.business.UserService;
 import com.dfedorino.urlshortener.ui.console.command.Command;
 import com.dfedorino.urlshortener.ui.console.command.impl.CreateLink;
-import com.dfedorino.urlshortener.ui.console.command.impl.Delete;
+import com.dfedorino.urlshortener.ui.console.command.impl.DeleteLink;
 import com.dfedorino.urlshortener.ui.console.command.impl.EditLinkRedirectLimit;
 import com.dfedorino.urlshortener.ui.console.command.impl.EditLinkUrl;
 import com.dfedorino.urlshortener.ui.console.command.impl.ListActiveLinks;
@@ -44,7 +44,7 @@ public class CommandConfig {
 
     @Bean
     public Command delete(UserService userService, LinkService linkService) {
-        return new Delete(userService, linkService);
+        return new DeleteLink(userService, linkService);
     }
 
     @Bean

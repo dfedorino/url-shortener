@@ -18,6 +18,7 @@ public final class ListActiveLinks implements Command<List<LinkDto>> {
 
     public static final String KEY_TOKEN = "list";
     public static final String SUCCESS_MESSAGE = "Active link successfully fetched!";
+    public static final String DESCRIPTION_MESSAGE = "List active created links";
     private final UserService userService;
     private final LinkService linkService;
 
@@ -46,7 +47,7 @@ public final class ListActiveLinks implements Command<List<LinkDto>> {
 
     @Override
     public String description() {
-        return "List active created links";
+        return DESCRIPTION_MESSAGE;
     }
 
     @Override

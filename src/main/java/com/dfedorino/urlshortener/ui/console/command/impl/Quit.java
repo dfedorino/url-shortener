@@ -6,9 +6,14 @@ import com.dfedorino.urlshortener.ui.console.command.dto.ResultWithNotification;
 public final class Quit implements Command<Void> {
 
     public static final String KEY_TOKEN = "quit";
+    public static final String DESCRIPTION_MESSAGE = "Exit";
 
     @Override
     public ResultWithNotification<Void> apply(String... commandAndArgs) {
+        var failedArgsCheck = validateArguments(args -> args.length == 1, commandAndArgs);
+        if (failedArgsCheck.isPresent()) {
+            return failedArgsCheck.get();
+        }
         System.exit(0);
         return null;
     }
@@ -20,7 +25,7 @@ public final class Quit implements Command<Void> {
 
     @Override
     public String description() {
-        return "Exit";
+        return DESCRIPTION_MESSAGE;
     }
 
     @Override

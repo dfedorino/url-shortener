@@ -15,7 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 public class CreateLink implements Command<LinkDto> {
 
     public static final String KEY_TOKEN = "create";
+    public static final String EXAMPLE_MESSAGE = KEY_TOKEN + " https://skillfactory.ru/ 100";
     public static final String SUCCESS_MESSAGE = "Link successfully created!";
+    public static final String DESCRIPTION_MESSAGE = "Shorten the given URL";
     private final UserService userService;
     private final LinkService linkService;
 
@@ -48,11 +50,11 @@ public class CreateLink implements Command<LinkDto> {
 
     @Override
     public String description() {
-        return "Shorten the given URL, where URL is a valid URL";
+        return DESCRIPTION_MESSAGE;
     }
 
     @Override
     public String example() {
-        return KEY_TOKEN + " https://skillfactory.ru/ 100";
+        return EXAMPLE_MESSAGE;
     }
 }

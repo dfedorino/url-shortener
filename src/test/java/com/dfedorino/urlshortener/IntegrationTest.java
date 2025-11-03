@@ -8,6 +8,7 @@ import com.dfedorino.urlshortener.jdbc.util.DataUtil;
 import com.dfedorino.urlshortener.service.validation.LinkValidationService;
 import com.dfedorino.urlshortener.ui.console.Cli;
 import com.dfedorino.urlshortener.ui.console.command.impl.CreateLink;
+import com.dfedorino.urlshortener.ui.console.command.impl.DeleteLink;
 import com.dfedorino.urlshortener.ui.console.command.impl.EditLinkRedirectLimit;
 import com.dfedorino.urlshortener.ui.console.command.impl.EditLinkUrl;
 import com.dfedorino.urlshortener.ui.console.command.impl.ListActiveLinks;
@@ -42,6 +43,7 @@ class IntegrationTest {
     private EditLinkUrl editLinkUrl;
     private EditLinkRedirectLimit editLinkRedirectLimit;
     private Login login;
+    private DeleteLink deleteLink;
 
     private ArgumentCaptor<URI> uriArgumentCaptor;
 
@@ -177,6 +179,10 @@ class IntegrationTest {
         assertThat(givenActiveLinksListed())
                 .containsExactly(redirectedLink);
 
+        LinkDto deletedLink = givenLinkDeleted(shortLink);
+        assertThat(deletedLink.status()).isEqualTo(LinkStatus.DELETED.name());
+        assertThat(givenActiveLinksListed())
+                .isEmpty();
     }
 
     private <T> T verifyLinkIsVisitedWhileCalling(String link, Callable<T> visitingCallback) {
@@ -225,6 +231,7 @@ class IntegrationTest {
         editLinkUrl = ctx.getBean(EditLinkUrl.class);
         editLinkRedirectLimit = ctx.getBean(EditLinkRedirectLimit.class);
         login = ctx.getBean(Login.class);
+        deleteLink = ctx.getBean(DeleteLink.class);
     }
 
     private LinkDto givenLinkIsCreated(String url, String redirectLimit) {
@@ -291,6 +298,16 @@ class IntegrationTest {
         assertThat(loginResult.notification())
                 .isEqualTo(Login.SUCCESS_MESSAGE);
         assertThat(loginResult.result()).isNotEmpty();
+    }
+
+    private LinkDto givenLinkDeleted(String shortLink) {
+        var deleteLinkResult = deleteLink.apply(DeleteLink.KEY_TOKEN, shortLink);
+
+        assertThat(deleteLinkResult.notification())
+                .isEqualTo(DeleteLink.SUCCESS_MESSAGE);
+        assertThat(deleteLinkResult.result()).isNotEmpty();
+
+        return deleteLinkResult.result().get();
     }
 
 }

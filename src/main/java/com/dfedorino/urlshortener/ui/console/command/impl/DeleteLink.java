@@ -14,10 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class Delete implements Command<LinkDto> {
+public class DeleteLink implements Command<LinkDto> {
 
     public static final String KEY_TOKEN = "delete";
+    public static final String EXAMPLE_MESSAGE = KEY_TOKEN + " " + Cli.SHORTENED_URL_PREFIX + "AQ";
     public static final String SUCCESS_MESSAGE = "Link successfully deleted";
+    public static final String DESCRIPTION_MESSAGE = "Delete given link";
     private final UserService userService;
     private final LinkService linkService;
 
@@ -25,8 +27,7 @@ public class Delete implements Command<LinkDto> {
     public ResultWithNotification<LinkDto> apply(String... commandAndArgs) {
         var firstFailedCheck = validateInOrder(List.of(
                 () -> validateArguments(args -> args.length == 2, commandAndArgs),
-                () -> validateShortLink(commandAndArgs[1]),
-                () -> validateLimit(commandAndArgs[2])
+                () -> validateShortLink(commandAndArgs[1])
         ));
 
         if (firstFailedCheck.isPresent()) {
@@ -59,11 +60,11 @@ public class Delete implements Command<LinkDto> {
 
     @Override
     public String description() {
-        return "Delete given link";
+        return DESCRIPTION_MESSAGE;
     }
 
     @Override
     public String example() {
-        return KEY_TOKEN + " " + Cli.SHORTENED_URL_PREFIX + "AQ";
+        return EXAMPLE_MESSAGE;
     }
 }

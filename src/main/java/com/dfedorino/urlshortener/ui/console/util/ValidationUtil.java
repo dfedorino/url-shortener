@@ -15,8 +15,9 @@ public class ValidationUtil {
 
     public boolean isValidUrl(String url) {
         try {
-            return URI.create(url).toURL() != null;
-        } catch (MalformedURLException e) {
+            URI.create(url).toURL();
+            return true;
+        } catch (Exception e) {
             return false;
         }
     }
@@ -24,7 +25,7 @@ public class ValidationUtil {
     public static boolean isValidLimit(String limit) {
         try {
             return Integer.parseInt(limit) > 0;
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -33,7 +34,7 @@ public class ValidationUtil {
         try {
             UUID.fromString(uuid);
             return true;
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return false;
         }
     }

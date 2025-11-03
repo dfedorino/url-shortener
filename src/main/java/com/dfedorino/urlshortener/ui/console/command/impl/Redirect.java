@@ -22,8 +22,10 @@ import lombok.extern.slf4j.Slf4j;
 public final class Redirect implements Command<LinkDto> {
 
     public static final String KEY_TOKEN = "redirect";
+    public static final String EXAMPLE_MESSAGE = KEY_TOKEN + " " + Cli.SHORTENED_URL_PREFIX + "AQ";
     public static final String SUCCESS_MESSAGE = "Successfully redirected!";
     public static final String FAILED_TO_BROWSE_LINK = "Failed to browse link: %s";
+    public static final String DESCRIPTION_MESSAGE = "Redirect with the given short URL to the original URL";
     private final UserService userService;
     private final LinkService linkService;
 
@@ -89,11 +91,11 @@ public final class Redirect implements Command<LinkDto> {
 
     @Override
     public String description() {
-        return "Redirect with the given short URL to the original URL";
+        return DESCRIPTION_MESSAGE;
     }
 
     @Override
     public String example() {
-        return KEY_TOKEN + " " + Cli.SHORTENED_URL_PREFIX + "AQ";
+        return EXAMPLE_MESSAGE;
     }
 }

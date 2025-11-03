@@ -13,7 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 public final class Login implements Command<String> {
 
     public static final String KEY_TOKEN = "login";
+    public static final String EXAMPLE_MESSAGE = KEY_TOKEN + " UUID";
     public static final String SUCCESS_MESSAGE = "Login successful!";
+    public static final String DESCRIPTION_MESSAGE = "Login with UUID";
 
     private final UserService userService;
 
@@ -46,11 +48,11 @@ public final class Login implements Command<String> {
 
     @Override
     public String description() {
-        return "Login with UUID";
+        return DESCRIPTION_MESSAGE;
     }
 
     @Override
     public String example() {
-        return KEY_TOKEN + " UUID";
+        return EXAMPLE_MESSAGE;
     }
 }
