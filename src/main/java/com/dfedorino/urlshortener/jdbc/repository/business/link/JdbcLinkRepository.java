@@ -41,6 +41,9 @@ public class JdbcLinkRepository implements LinkRepository {
     public static final String SELECT_BY_STATUS_ID = "SELECT * FROM \"link\""
             + " WHERE status_id = :" + STATUS_ID;
 
+    public static final String SELECT_BY_USER_ID_AND_ORIGINAL_URL = "SELECT * FROM \"link\""
+            + " WHERE user_id = :" + USER_ID + " AND original_url = :" + ORIGINAL_URL;
+
     private final JdbcClient jdbcClient;
 
     @Override
@@ -122,5 +125,14 @@ public class JdbcLinkRepository implements LinkRepository {
                 .param(STATUS_ID, statusId)
                 .query(Link.class)
                 .list();
+    }
+
+    @Override
+    public Optional<Link> findByUserIdAndOriginalUrl(Long userId, String originalUrl) {
+        return jdbcClient.sql(SELECT_BY_USER_ID_AND_ORIGINAL_URL)
+                .param(USER_ID, userId)
+                .param(ORIGINAL_URL, originalUrl)
+                .query(Link.class)
+                .optional();
     }
 }

@@ -68,18 +68,36 @@ class IntegrationTest {
      */
     @Test
     void same_url_different_users() {
-        LinkDto link1 = givenLinkIsCreated("https://skillfactory.ru/", "100");
+        LinkDto link1 = givenLinkIsCreated(TestConstants.VALID_URL,
+                                           String.valueOf(TestConstants.REDIRECT_LIMIT)
+        );
         String user1 = Cli.USER_UUID.get();
 
         // emulate new session
         Cli.USER_UUID.remove();
 
-        LinkDto link2 = givenLinkIsCreated("https://skillfactory.ru/", "100");
+        LinkDto link2 = givenLinkIsCreated(TestConstants.VALID_URL,
+                                           String.valueOf(TestConstants.REDIRECT_LIMIT)
+        );
         String user2 = Cli.USER_UUID.get();
 
         assertThat(user1).isNotEqualTo(user2);
         assertThat(link1.originalUrl()).isEqualTo(link2.originalUrl());
         assertThat(link1.code()).isNotEqualTo(link2.code());
+    }
+
+    @Test
+    void same_url_same_user() {
+        LinkDto link = givenLinkIsCreated(TestConstants.VALID_URL,
+                                          String.valueOf(TestConstants.REDIRECT_LIMIT)
+        );
+
+        verifyLinkIsNotCreated(TestConstants.VALID_URL,
+                               String.valueOf(TestConstants.REDIRECT_LIMIT),
+                               CreateLink.DUPLICATE_MESSAGE.formatted(TestConstants.VALID_URL));
+
+        assertThat(givenActiveLinksListed())
+                .containsExactly(link);
     }
 
     /**
@@ -89,15 +107,16 @@ class IntegrationTest {
      */
     @Test
     void check_redirect_limit() {
-        LinkDto link = givenLinkIsCreated("https://skillfactory.ru/", "1");
+        LinkDto link = givenLinkIsCreated(TestConstants.VALID_URL, "1"
+        );
         String shortLink = Cli.SHORTENED_URL_PREFIX + link.code();
 
         LinkDto redirectedLink = verifyLinkIsVisitedWhileCalling(
-                "https://skillfactory.ru/",
+                TestConstants.VALID_URL,
                 () -> givenLinkRedirected(shortLink)
         );
 
-        assertThat(redirectedLink.originalUrl()).isEqualTo("https://skillfactory.ru/");
+        assertThat(redirectedLink.originalUrl()).isEqualTo(TestConstants.VALID_URL);
         assertThat(redirectedLink.redirectLimit()).isZero();
 
         verifyNoLinkIsVisitedWhileCalling(
@@ -117,20 +136,23 @@ class IntegrationTest {
         initContextWithProperties("short_ttl_test.properties"); // ttl = 1ms
         initCommandBeans();
 
-        var createdLink = givenLinkIsCreated("https://skillfactory.ru/", "1");
+        var createdLink = givenLinkIsCreated(TestConstants.VALID_URL, "1"
+        );
 
         String shortLink = Cli.SHORTENED_URL_PREFIX + createdLink.code();
         var staleLink = verifyNoLinkIsVisitedWhileCalling(
                 () -> givenLinkRedirectionFailed(shortLink, LinkValidationService.EXPIRED)
         );
-        assertThat(staleLink.originalUrl()).isEqualTo("https://skillfactory.ru/");
+        assertThat(staleLink.originalUrl()).isEqualTo(TestConstants.VALID_URL);
         assertThat(staleLink.redirectLimit()).isOne();
         assertThat(staleLink.status()).isEqualTo(LinkStatus.INVALID.name());
     }
 
     @Test
     void check_full_scenario() {
-        LinkDto createdLink = givenLinkIsCreated("https://skillfactory.ru/", "100");
+        LinkDto createdLink = givenLinkIsCreated(TestConstants.VALID_URL,
+                                                 String.valueOf(TestConstants.REDIRECT_LIMIT)
+        );
         String shortLink = Cli.SHORTENED_URL_PREFIX + createdLink.code();
 
         String newUrl = "https://ya.ru";
@@ -167,7 +189,8 @@ class IntegrationTest {
         // emulate new session
         Cli.USER_UUID.remove();
 
-        givenLinkIsCreated("https://google.com/", "100");
+        givenLinkIsCreated("https://google.com/", String.valueOf(TestConstants.REDIRECT_LIMIT)
+        );
 
         assertThat(givenActiveLinksListed())
                 .extracting(LinkDto::originalUrl)
@@ -281,9 +304,10 @@ class IntegrationTest {
     }
 
     private LinkDto givenLinkRedirectLimitUpdated(String shortLink, String newRedirectLimit) {
-        var editLinkRedirectLimitResult = editLinkRedirectLimit.apply(EditLinkRedirectLimit.KEY_TOKEN,
-                                                                      shortLink,
-                                                                      newRedirectLimit);
+        var editLinkRedirectLimitResult = editLinkRedirectLimit.apply(
+                EditLinkRedirectLimit.KEY_TOKEN,
+                shortLink,
+                newRedirectLimit);
 
         assertThat(editLinkRedirectLimitResult.notification())
                 .isEqualTo(EditLinkRedirectLimit.SUCCESS_MESSAGE);
@@ -308,6 +332,15 @@ class IntegrationTest {
         assertThat(deleteLinkResult.result()).isNotEmpty();
 
         return deleteLinkResult.result().get();
+    }
+
+    private void verifyLinkIsNotCreated(String url, String redirectLimit, String expectedMessage) {
+        var createLinkResult = createLink.apply(CreateLink.KEY_TOKEN,
+                                                url,
+                                                redirectLimit);
+
+        assertThat(createLinkResult.notification()).isEqualTo(expectedMessage);
+        assertThat(createLinkResult.result()).isEmpty();
     }
 
 }

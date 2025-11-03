@@ -207,4 +207,20 @@ class JdbcLinkRepositoryTest extends AbstractJdbcRepositoryTestSkeleton {
                     .containsExactly(createdLink);
         });
     }
+
+    @Test
+    void findByUserIdAndOriginalUrl() {
+        var user = tx(() -> userRepository.save(new User(UUID.randomUUID().toString())));
+        var randomCode = TestDataFactory.randomLinkCode();
+        Link createdLink = tx(() -> linkRepository.save(TestDataFactory.newLink(link -> {
+            link.setUserId(user.getId());
+            link.setCode(randomCode);
+        })));
+
+        tx(() -> {
+            assertThat(linkRepository.findByUserIdAndOriginalUrl(user.getId(),
+                                                                 createdLink.getOriginalUrl()))
+                    .contains(createdLink);
+        });
+    }
 }

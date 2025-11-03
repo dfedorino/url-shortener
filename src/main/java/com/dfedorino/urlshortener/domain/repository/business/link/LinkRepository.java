@@ -21,4 +21,6 @@ public interface LinkRepository {
     boolean updateStatusIdByUserIdAndCode(Long userId, String code, Long newStatusId);
 
     List<Link> findByStatusId(Long id);
+
+    Optional<Link> findByUserIdAndOriginalUrl(Long userId, String originalUrl);
 }

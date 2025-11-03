@@ -7,6 +7,7 @@ import com.dfedorino.urlshortener.domain.repository.business.link.LinkCounterRep
 import com.dfedorino.urlshortener.domain.repository.business.link.LinkRepository;
 import com.dfedorino.urlshortener.service.business.encode.IdEncodingStrategy;
 import com.dfedorino.urlshortener.service.validation.LinkValidationService;
+import com.dfedorino.urlshortener.service.validation.LinkValidationService.ValidatedLink;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -95,4 +96,8 @@ public class LinkService {
         return Objects.requireNonNull(tx.execute(callback));
     }
 
+    public Optional<ValidatedLink> findValidatedLinkByOriginalUrl(Long userId, String originalUrl) {
+        return linkRepository.findByUserIdAndOriginalUrl(userId, originalUrl)
+                .map(linkValidationService::validate);
+    }
 }
