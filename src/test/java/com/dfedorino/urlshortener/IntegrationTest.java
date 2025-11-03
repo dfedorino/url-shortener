@@ -100,6 +100,22 @@ class IntegrationTest {
                 .containsExactly(link);
     }
 
+    @Test
+    void same_link_deleted_twice() {
+        LinkDto link = givenLinkIsCreated(TestConstants.VALID_URL,
+                                          String.valueOf(TestConstants.REDIRECT_LIMIT)
+        );
+
+        String shortLink = Cli.SHORTENED_URL_PREFIX + link.code();
+        givenLinkDeleted(shortLink);
+
+        assertThat(givenActiveLinksListed())
+                .isEmpty();
+
+        verifyLinkIsNotDeleted(shortLink,
+                               DeleteLink.LINK_ALREADY_DELETED.formatted(shortLink));
+    }
+
     /**
      * 2. Проверьте, что при исчерпании лимита переходов переход по ссылке блокируется. 4.1
      * Убедитесь, что пользователи получают уведомления о том, что их ссылка недоступна из-за
@@ -338,6 +354,14 @@ class IntegrationTest {
         var createLinkResult = createLink.apply(CreateLink.KEY_TOKEN,
                                                 url,
                                                 redirectLimit);
+
+        assertThat(createLinkResult.notification()).isEqualTo(expectedMessage);
+        assertThat(createLinkResult.result()).isEmpty();
+    }
+
+    private void verifyLinkIsNotDeleted(String shortLink, String expectedMessage) {
+        var createLinkResult = deleteLink.apply(DeleteLink.KEY_TOKEN,
+                                                shortLink);
 
         assertThat(createLinkResult.notification()).isEqualTo(expectedMessage);
         assertThat(createLinkResult.result()).isEmpty();
