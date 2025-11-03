@@ -17,28 +17,28 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Configuration
 public class JdbcRepositoryConfig {
 
-  @Bean
-  public UserRepository jdbcUserRepository(DataSource dataSource) {
-    return new JdbcUserRepository(JdbcClient.create(dataSource));
-  }
+    @Bean
+    public UserRepository jdbcUserRepository(DataSource dataSource) {
+        return new JdbcUserRepository(JdbcClient.create(dataSource));
+    }
 
-  @Bean
-  public LinkRepository jdbcLinkRepository(DataSource dataSource) {
-    return new JdbcLinkRepository(JdbcClient.create(dataSource));
-  }
+    @Bean
+    public LinkRepository jdbcLinkRepository(DataSource dataSource) {
+        return new JdbcLinkRepository(JdbcClient.create(dataSource));
+    }
 
-  @Bean
-  public HousekeepingLinkRepository jdbcHousekeepingLinkRepository(DataSource dataSource) {
-    return new JdbcHousekeepingLinkRepository(JdbcClient.create(dataSource));
-  }
+    @Bean
+    public HousekeepingLinkRepository jdbcHousekeepingLinkRepository(DataSource dataSource) {
+        return new JdbcHousekeepingLinkRepository(JdbcClient.create(dataSource));
+    }
 
-  @Bean
-  public JdbcLinkCounterRepository jdbcLinkCounterRepository(DataSource dataSource) {
-    return new JdbcLinkCounterRepository(JdbcClient.create(dataSource));
-  }
+    @Bean
+    public JdbcLinkCounterRepository jdbcLinkCounterRepository(DataSource dataSource) {
+        return new JdbcLinkCounterRepository(JdbcClient.create(dataSource));
+    }
 
-  @Bean
-  public TransactionTemplate transactionTemplate(DataSource dataSource) {
-    return new TransactionTemplate(new JdbcTransactionManager(dataSource));
-  }
+    @Bean
+    public TransactionTemplate transactionTemplate(DataSource dataSource) {
+        return new TransactionTemplate(new JdbcTransactionManager(dataSource));
+    }
 }

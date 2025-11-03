@@ -15,25 +15,26 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class IterativeCleanupStrategy implements CleanupStrategy {
 
-  private final HousekeepingLinkRepository housekeepingLinkRepository;
-  private final LinkService linkService;
-  private final LinkValidationService linkValidationService;
+    private final HousekeepingLinkRepository housekeepingLinkRepository;
+    private final LinkService linkService;
+    private final LinkValidationService linkValidationService;
 
-  @Override
-  public void cleanup() {
-    try {
-      log.info("Starting cleanup task...");
+    @Override
+    public void cleanup() {
+        try {
+            log.info("Starting cleanup task...");
 
-      for (Link link : housekeepingLinkRepository.findByStatusId(LinkStatus.ACTIVE.getId())) {
-        LinkValidationService.ValidatedLink validatedLink = linkValidationService.validate(link);
-        if (validatedLink.status() == LinkValidationService.Status.INVALID) {
-          linkService.invalidateLink(link.getUserId(), link.getCode());
-          log.debug("Marked link as INVALID, code: {}", link.getCode());
+            for (Link link : housekeepingLinkRepository.findByStatusId(LinkStatus.ACTIVE.getId())) {
+                LinkValidationService.ValidatedLink validatedLink = linkValidationService.validate(
+                        link);
+                if (validatedLink.status() == LinkValidationService.Status.INVALID) {
+                    linkService.invalidateLink(link.getUserId(), link.getCode());
+                    log.debug("Marked link as INVALID, code: {}", link.getCode());
+                }
+            }
+            log.info("Cleanup finished.");
+        } catch (Exception e) {
+            log.error("Error during cleanup", e);
         }
-      }
-      log.info("Cleanup finished.");
-    } catch (Exception e) {
-      log.error("Error during cleanup", e);
     }
-  }
 }

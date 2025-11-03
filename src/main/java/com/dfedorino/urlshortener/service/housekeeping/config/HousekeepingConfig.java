@@ -11,13 +11,12 @@ import org.springframework.core.env.Environment;
 @Configuration
 public class HousekeepingConfig {
 
-  @Bean
-  public LinkHousekeepingService linkHousekeepingService(CleanupStrategy cleanupStrategy,
-      Environment env) {
-    return new LinkHousekeepingService(
-        cleanupStrategy,
-        Executors.newSingleThreadScheduledExecutor(),
-        Long.parseLong(Objects.requireNonNull(env.getProperty("housekeeping.interval")))
-    );
-  }
+    @Bean
+    public LinkHousekeepingService linkHousekeepingService(CleanupStrategy cleanupStrategy,
+                                                           Environment env) {
+        return new LinkHousekeepingService(
+                cleanupStrategy,
+                Executors.newSingleThreadScheduledExecutor(),
+                Long.parseLong(Objects.requireNonNull(env.getProperty("housekeeping.interval"))));
+    }
 }

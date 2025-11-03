@@ -11,11 +11,11 @@ import org.springframework.core.env.Environment;
 @Configuration
 public class LinkValidationConfig {
 
-  @Bean
-  public LinkValidationService linkValidationService(Environment env) {
-    return new LinkValidationService(
-        Long.parseLong(Objects.requireNonNull(env.getProperty("ttl"))),
-        Clock.system(ZoneId.of("Europe/Moscow"))
-    );
-  }
+    @Bean
+    public LinkValidationService linkValidationService(Environment env) {
+        return new LinkValidationService(
+                Long.parseLong(Objects.requireNonNull(env.getProperty("ttl"))),
+                Clock.system(ZoneId.of("Europe/Moscow"))
+        );
+    }
 }

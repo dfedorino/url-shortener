@@ -6,19 +6,19 @@ import java.util.Optional;
 
 public interface LinkRepository {
 
-  Link save(Link link);
+    Link save(Link link);
 
-  Optional<Link> findByUserIdAndCode(Long userId, String code);
+    Optional<Link> findByUserIdAndCode(Long userId, String code);
 
-  List<Link> findByUserId(Long userId);
+    List<Link> findByUserId(Long userId);
 
-  List<Link> findByUserIdAndStatusId(Long userId, Long statusId);
+    List<Link> findByUserIdAndStatusId(Long userId, Long statusId);
 
-  boolean updateOriginalUrlByUserIdAndCode(Long userId, String code, String newOriginalUrl);
+    boolean updateOriginalUrlByUserIdAndCode(Long userId, String code, String newOriginalUrl);
 
-  boolean updateRedirectLimitByUserIdAndCode(Long userId, String code, Integer newRedirectLimit);
+    boolean updateRedirectLimitByUserIdAndCode(Long userId, String code, Integer newRedirectLimit);
 
-  boolean updateStatusIdByUserIdAndCode(Long userId, String code, Long newStatusId);
+    boolean updateStatusIdByUserIdAndCode(Long userId, String code, Long newStatusId);
 
-  List<Link> findByStatusId(Long id);
+    List<Link> findByStatusId(Long id);
 }

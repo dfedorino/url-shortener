@@ -11,30 +11,31 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 @RequiredArgsConstructor
 public class JdbcUserRepository implements UserRepository {
 
-  public static final String INSERT_INTO_USER = "INSERT INTO \"user\"(uuid) VALUES (:uuid)";
-  public static final String SELECT_BY_UUID = "SELECT id, uuid, created_at FROM \"user\" WHERE uuid = :uuid";
+    public static final String INSERT_INTO_USER = "INSERT INTO \"user\"(uuid) VALUES (:uuid)";
+    public static final String SELECT_BY_UUID = "SELECT id, uuid, created_at FROM \"user\""
+            + " WHERE uuid = :uuid";
 
-  private final JdbcClient jdbcClient;
+    private final JdbcClient jdbcClient;
 
-  @Override
-  public User save(User user) {
-    var keyHolder = new GeneratedKeyHolder();
+    @Override
+    public User save(User user) {
+        var keyHolder = new GeneratedKeyHolder();
 
-    jdbcClient.sql(INSERT_INTO_USER)
-        .param("uuid", user.getUuid())
-        .update(keyHolder);
+        jdbcClient.sql(INSERT_INTO_USER)
+                .param("uuid", user.getUuid())
+                .update(keyHolder);
 
-    user.setId(KeyHolderUtil.getId(keyHolder));
-    user.setCreatedAt(KeyHolderUtil.getCreatedAt(keyHolder));
+        user.setId(KeyHolderUtil.getId(keyHolder));
+        user.setCreatedAt(KeyHolderUtil.getCreatedAt(keyHolder));
 
-    return user;
-  }
+        return user;
+    }
 
-  @Override
-  public Optional<User> findByUuid(String uuid) {
-    return jdbcClient.sql(SELECT_BY_UUID)
-        .param("uuid", uuid)
-        .query(User.class)
-        .optional();
-  }
+    @Override
+    public Optional<User> findByUuid(String uuid) {
+        return jdbcClient.sql(SELECT_BY_UUID)
+                .param("uuid", uuid)
+                .query(User.class)
+                .optional();
+    }
 }

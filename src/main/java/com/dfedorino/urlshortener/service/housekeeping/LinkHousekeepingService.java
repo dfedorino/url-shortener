@@ -11,19 +11,19 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class LinkHousekeepingService {
 
-  private final CleanupStrategy cleanupStrategy;
-  private final ScheduledExecutorService scheduler;
-  private final long intervalMs;
+    private final CleanupStrategy cleanupStrategy;
+    private final ScheduledExecutorService scheduler;
+    private final long intervalMs;
 
-  public void start() {
-    log.info(">> Housekeeping started");
-    scheduler.scheduleAtFixedRate(cleanupStrategy::cleanup, intervalMs, intervalMs,
-        TimeUnit.MILLISECONDS);
-  }
+    public void start() {
+        log.info(">> Housekeeping started");
+        scheduler.scheduleAtFixedRate(cleanupStrategy::cleanup, intervalMs, intervalMs,
+                                      TimeUnit.MILLISECONDS);
+    }
 
-  public void stop() {
-    log.info(">> Housekeeping stopped");
-    scheduler.shutdown();
-  }
+    public void stop() {
+        log.info(">> Housekeeping stopped");
+        scheduler.shutdown();
+    }
 }
 

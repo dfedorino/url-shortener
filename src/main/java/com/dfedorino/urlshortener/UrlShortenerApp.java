@@ -10,31 +10,29 @@ import javax.sql.DataSource;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 // TODO:
-//  add sonar
-//  add GitHub actions (checkstyle, code coverage)
 //  generate docs
 //
 public class UrlShortenerApp {
 
-  public static void main(String[] args) throws IOException {
-    LinkHousekeepingService linkHousekeepingService = null;
+    public static void main(String[] args) throws IOException {
+        LinkHousekeepingService linkHousekeepingService = null;
 
-    try (var context = new AnnotationConfigApplicationContext()) {
-      context.register(AppConfig.class);
-      PropertiesUtil.addApplicationProperties(context, "application.properties");
-      context.refresh();
+        try (var context = new AnnotationConfigApplicationContext()) {
+            context.register(AppConfig.class);
+            PropertiesUtil.addApplicationProperties(context, "application.properties");
+            context.refresh();
 
-      DataSource dataSource = context.getBean(DataSource.class);
-      DatabaseUtil.preloadDataFromClasspath("schema.sql", dataSource);
+            DataSource dataSource = context.getBean(DataSource.class);
+            DatabaseUtil.preloadDataFromClasspath("schema.sql", dataSource);
 
-      Cli cli = context.getBean(Cli.class);
-      linkHousekeepingService = context.getBean(LinkHousekeepingService.class);
-      linkHousekeepingService.start();
-      cli.start();
-    } finally {
-      if (linkHousekeepingService != null) {
-        linkHousekeepingService.stop();
-      }
+            Cli cli = context.getBean(Cli.class);
+            linkHousekeepingService = context.getBean(LinkHousekeepingService.class);
+            linkHousekeepingService.start();
+            cli.start();
+        } finally {
+            if (linkHousekeepingService != null) {
+                linkHousekeepingService.stop();
+            }
+        }
     }
-  }
 }

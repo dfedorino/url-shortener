@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LinkCounter {
 
-  private long id;
-  private long count;
+    private long id;
+    private long count;
 }

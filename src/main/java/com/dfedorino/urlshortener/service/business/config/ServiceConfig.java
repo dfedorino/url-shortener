@@ -14,25 +14,25 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Configuration
 public class ServiceConfig {
 
-  @Bean
-  public LinkService linkService(
-      LinkRepository linkRepository,
-      LinkCounterRepository linkCounterRepository,
-      IdEncodingStrategy idEncodingStrategy,
-      LinkValidationService linkValidationService,
-      TransactionTemplate transactionTemplate
-  ) {
-    return new LinkService(linkRepository,
-        linkCounterRepository,
-        idEncodingStrategy,
-        linkValidationService,
-        transactionTemplate
-    );
-  }
+    @Bean
+    public LinkService linkService(
+            LinkRepository linkRepository,
+            LinkCounterRepository linkCounterRepository,
+            IdEncodingStrategy idEncodingStrategy,
+            LinkValidationService linkValidationService,
+            TransactionTemplate transactionTemplate
+    ) {
+        return new LinkService(linkRepository,
+                               linkCounterRepository,
+                               idEncodingStrategy,
+                               linkValidationService,
+                               transactionTemplate
+        );
+    }
 
-  @Bean
-  public UserService userService(UserRepository userRepository,
-      TransactionTemplate transactionTemplate) {
-    return new UserService(userRepository, transactionTemplate);
-  }
+    @Bean
+    public UserService userService(UserRepository userRepository,
+                                   TransactionTemplate transactionTemplate) {
+        return new UserService(userRepository, transactionTemplate);
+    }
 }

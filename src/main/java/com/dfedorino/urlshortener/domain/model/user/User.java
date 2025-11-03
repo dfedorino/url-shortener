@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class User {
 
-  private Long id;
-  private String uuid;
-  private LocalDateTime createdAt;
+    private Long id;
+    private String uuid;
+    private LocalDateTime createdAt;
 
-  public User(String uuid) {
-    this(null, uuid, null);
-  }
+    public User(String uuid) {
+        this(null, uuid, null);
+    }
 }

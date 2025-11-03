@@ -8,9 +8,9 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 @UtilityClass
 public class DataUtil {
 
-  public void preloadSchema(DataSource dataSource) {
-    ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
-    resourceDatabasePopulator.addScript(new ClassPathResource("schema.sql"));
-    resourceDatabasePopulator.execute(dataSource);
-  }
+    public void preloadSchema(DataSource dataSource) {
+        ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
+        resourceDatabasePopulator.addScript(new ClassPathResource("schema.sql"));
+        resourceDatabasePopulator.execute(dataSource);
+    }
 }

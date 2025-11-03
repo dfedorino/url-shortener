@@ -9,16 +9,16 @@ import org.springframework.jdbc.support.KeyHolder;
 @UtilityClass
 public class KeyHolderUtil {
 
-  public static final String ID = "ID";
-  public static final String CREATED_AT = "CREATED_AT";
+    public static final String ID = "ID";
+    public static final String CREATED_AT = "CREATED_AT";
 
 
-  public Long getId(KeyHolder keyHolder) {
-    return (Long) Objects.requireNonNull(keyHolder.getKeys()).get(ID);
-  }
+    public Long getId(KeyHolder keyHolder) {
+        return (Long) Objects.requireNonNull(keyHolder.getKeys()).get(ID);
+    }
 
-  public LocalDateTime getCreatedAt(KeyHolder keyHolder) {
-    return ((Timestamp) Objects.requireNonNull(keyHolder.getKeys()).get(CREATED_AT))
-        .toLocalDateTime();
-  }
+    public LocalDateTime getCreatedAt(KeyHolder keyHolder) {
+        return ((Timestamp) Objects.requireNonNull(keyHolder.getKeys()).get(CREATED_AT))
+                .toLocalDateTime();
+    }
 }
