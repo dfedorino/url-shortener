@@ -1,10 +1,11 @@
 package com.dfedorino.urlshortener.ui.console;
 
+import com.dfedorino.urlshortener.domain.model.link.LinkDto;
 import com.dfedorino.urlshortener.ui.console.command.Command;
+import com.dfedorino.urlshortener.ui.console.command.dto.ResultWithNotification;
 import com.dfedorino.urlshortener.ui.console.command.impl.Quit;
 import com.dfedorino.urlshortener.ui.console.util.ConsoleUtils;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 import java.util.function.Function;
@@ -30,8 +31,9 @@ public class Cli {
 
     private final List<Command> commands;
 
+    @SuppressWarnings("unchecked")
     public void start() {
-        Map<String, Command> keyToCommand = commands.stream()
+        var keyToCommand = commands.stream()
                 .collect(Collectors.toMap(Command::key, Function.identity()));
 
         log.info(TITLE);
@@ -47,7 +49,20 @@ public class Cli {
                 log.info(INVALID_COMMAND);
                 ConsoleUtils.printOutAvailableCommands(commands);
             } else {
-                keyToCommand.get(command).apply(tokens);
+                ResultWithNotification<?> apply = keyToCommand.get(command).apply(tokens);
+                log.info(apply.notification());
+                apply.result().ifPresent(value -> {
+                    if (value instanceof LinkDto link) {
+                        ConsoleUtils.printOutResult(Cli.USER_UUID.get(), link);
+                    } else if (value instanceof List list) {
+                        List<LinkDto> links = (List<LinkDto>) list;
+                        ConsoleUtils.printOutResult(Cli.USER_UUID.get(),
+                                                    links.toArray(LinkDto[]::new));
+                    } else {
+                        log.info(">> user id: {}", Cli.USER_UUID.get());
+                        log.info(value.toString());
+                    }
+                });
             }
         }
     }

@@ -9,9 +9,6 @@ import java.io.IOException;
 import javax.sql.DataSource;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-// TODO:
-//  generate docs
-//
 public class UrlShortenerApp {
 
     public static void main(String[] args) throws IOException {
