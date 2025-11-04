@@ -8,14 +8,6 @@
         <plugins>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <argLine>
-                        ${argLine}
-                        <!-- fixes the "Mockito is currently self-attaching to enable the inline-mock-maker." warning-->
-                        -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
-                        -Xshare:off
-                    </argLine>
-                </configuration>
                 <groupId>org.apache.maven.plugins</groupId>
                 <version>3.2.5</version>
             </plugin>

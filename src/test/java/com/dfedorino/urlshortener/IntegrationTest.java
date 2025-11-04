@@ -94,9 +94,11 @@ class IntegrationTest {
                                           String.valueOf(TestConstants.REDIRECT_LIMIT)
         );
 
+        String shortLink = Cli.SHORTENED_URL_PREFIX + link.code();
         verifyLinkIsNotCreated(TestConstants.VALID_URL,
                                String.valueOf(TestConstants.REDIRECT_LIMIT),
-                               CreateLink.DUPLICATE_MESSAGE.formatted(TestConstants.VALID_URL));
+                               CreateLink.DUPLICATE_MESSAGE.formatted(TestConstants.VALID_URL,
+                                                                      shortLink));
 
         assertThat(givenActiveLinksListed())
                 .containsExactly(link);
