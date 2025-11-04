@@ -5,7 +5,7 @@ import com.dfedorino.urlshortener.domain.model.link.LinkStatus;
 import com.dfedorino.urlshortener.domain.model.user.User;
 import com.dfedorino.urlshortener.service.business.LinkService;
 import com.dfedorino.urlshortener.service.business.UserService;
-import com.dfedorino.urlshortener.service.validation.LinkValidationService.ValidatedLink;
+import com.dfedorino.urlshortener.service.validation.dto.ValidatedLink;
 import com.dfedorino.urlshortener.ui.console.Cli;
 import com.dfedorino.urlshortener.ui.console.command.Command;
 import com.dfedorino.urlshortener.ui.console.command.dto.ResultWithNotification;

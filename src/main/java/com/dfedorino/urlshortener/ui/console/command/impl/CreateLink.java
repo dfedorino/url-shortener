@@ -3,7 +3,7 @@ package com.dfedorino.urlshortener.ui.console.command.impl;
 import com.dfedorino.urlshortener.domain.model.link.LinkDto;
 import com.dfedorino.urlshortener.service.business.LinkService;
 import com.dfedorino.urlshortener.service.business.UserService;
-import com.dfedorino.urlshortener.service.validation.LinkValidationService.Status;
+import com.dfedorino.urlshortener.service.validation.ValidationStatus;
 import com.dfedorino.urlshortener.ui.console.Cli;
 import com.dfedorino.urlshortener.ui.console.command.Command;
 import com.dfedorino.urlshortener.ui.console.command.dto.ResultWithNotification;
@@ -53,7 +53,8 @@ public class CreateLink implements Command<LinkDto> {
 
         var possibleDuplicate = linkService.findValidatedLinkByOriginalUrl(userId, originalUrl);
 
-        if (possibleDuplicate.isPresent() && possibleDuplicate.get().status() == Status.VALID) {
+        if (possibleDuplicate.isPresent()
+                && possibleDuplicate.get().validationStatus() == ValidationStatus.VALID) {
             return ResultWithNotification.ofErrorMessage(
                     CreateLink.DUPLICATE_MESSAGE.formatted(originalUrl));
         }

@@ -1,7 +1,6 @@
 package com.dfedorino.urlshortener.ui.console.util;
 
 import com.dfedorino.urlshortener.ui.console.Cli;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.UUID;
 import lombok.experimental.UtilityClass;

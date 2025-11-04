@@ -25,7 +25,7 @@ public class ConsoleUtils {
 
     }
 
-    public void printOutAvailableCommands(List<Command> commands) {
+    public void printOutAvailableCommands(List<Command<?>> commands) {
         log.info(Cli.AVAILABLE_COMMANDS);
 
         commands.forEach(command -> System.out.printf(Cli.COMMAND_LINE_TEMPLATE,

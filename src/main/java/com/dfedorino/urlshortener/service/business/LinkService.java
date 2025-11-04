@@ -7,7 +7,7 @@ import com.dfedorino.urlshortener.domain.repository.business.link.LinkCounterRep
 import com.dfedorino.urlshortener.domain.repository.business.link.LinkRepository;
 import com.dfedorino.urlshortener.service.business.encode.IdEncodingStrategy;
 import com.dfedorino.urlshortener.service.validation.LinkValidationService;
-import com.dfedorino.urlshortener.service.validation.LinkValidationService.ValidatedLink;
+import com.dfedorino.urlshortener.service.validation.dto.ValidatedLink;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,8 +41,8 @@ public class LinkService {
         });
     }
 
-    public Optional<LinkValidationService.ValidatedLink> findValidatedLink(@NonNull Long userId,
-                                                                           @NonNull String code) {
+    public Optional<ValidatedLink> findValidatedLink(@NonNull Long userId,
+                                                     @NonNull String code) {
         return safeTx($ -> linkRepository.findByUserIdAndCode(userId, code))
                 .map(linkValidationService::validate);
     }
@@ -83,6 +83,12 @@ public class LinkService {
         return updateLinkStatus(userId, code, LinkStatus.DELETED);
     }
 
+
+    public Optional<ValidatedLink> findValidatedLinkByOriginalUrl(Long userId, String originalUrl) {
+        return linkRepository.findByUserIdAndOriginalUrl(userId, originalUrl)
+                .map(linkValidationService::validate);
+    }
+
     private Optional<LinkDto> updateLinkStatus(@NonNull Long userId, @NonNull String code,
                                                @NonNull LinkStatus newStatus) {
         boolean isUpdatedSuccessfully = safeTx($ ->
@@ -95,10 +101,5 @@ public class LinkService {
 
     private <T> T safeTx(TransactionCallback<T> callback) {
         return Objects.requireNonNull(tx.execute(callback));
-    }
-
-    public Optional<ValidatedLink> findValidatedLinkByOriginalUrl(Long userId, String originalUrl) {
-        return linkRepository.findByUserIdAndOriginalUrl(userId, originalUrl)
-                .map(linkValidationService::validate);
     }
 }

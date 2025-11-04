@@ -11,7 +11,6 @@ public class TestConstants {
     public static final String INVALID_URL = "invalid_url";
     public static final String NEW_URL = "https://google.com";
     public static final String USER_UUID = UUID.randomUUID().toString();
-    public static final long USER_ID = 1L;
     public static final int REDIRECT_LIMIT = 100;
     public static final int INVALID_REDIRECT_LIMIT = -1;
     public static final String NEW_REDIRECT_LIMIT = "10";

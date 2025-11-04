@@ -29,7 +29,7 @@ public class Cli {
     public static final String COMMAND_LINE_TEMPLATE = "* %s : %s, example: '%s'%n";
     public static final String INVALID_COMMAND = "!!! Invalid command !!!";
 
-    private final List<Command> commands;
+    private final List<Command<?>> commands;
 
     @SuppressWarnings("unchecked")
     public void start() {

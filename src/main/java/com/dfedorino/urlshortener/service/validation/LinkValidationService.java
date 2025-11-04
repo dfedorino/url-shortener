@@ -1,7 +1,7 @@
 package com.dfedorino.urlshortener.service.validation;
 
 import com.dfedorino.urlshortener.domain.model.link.Link;
-import com.dfedorino.urlshortener.domain.model.link.LinkDto;
+import com.dfedorino.urlshortener.service.validation.dto.ValidatedLink;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -31,22 +31,4 @@ public class LinkValidationService {
         return ValidatedLink.valid(link);
     }
 
-    public enum Status {
-        VALID, INVALID
-    }
-
-    public record ValidatedLink(
-            Status status,
-            LinkDto link,
-            String reasonWhyInvalid
-    ) {
-
-        public static ValidatedLink valid(Link validLink) {
-            return new ValidatedLink(Status.VALID, LinkDto.of(validLink), null);
-        }
-
-        public static ValidatedLink invalid(Link validLink, String reasonWhyInvalid) {
-            return new ValidatedLink(Status.INVALID, LinkDto.of(validLink), reasonWhyInvalid);
-        }
-    }
 }

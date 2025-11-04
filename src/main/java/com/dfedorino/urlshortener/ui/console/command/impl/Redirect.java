@@ -5,8 +5,8 @@ import com.dfedorino.urlshortener.domain.model.link.LinkStatus;
 import com.dfedorino.urlshortener.domain.model.user.User;
 import com.dfedorino.urlshortener.service.business.LinkService;
 import com.dfedorino.urlshortener.service.business.UserService;
-import com.dfedorino.urlshortener.service.validation.LinkValidationService;
-import com.dfedorino.urlshortener.service.validation.LinkValidationService.ValidatedLink;
+import com.dfedorino.urlshortener.service.validation.ValidationStatus;
+import com.dfedorino.urlshortener.service.validation.dto.ValidatedLink;
 import com.dfedorino.urlshortener.ui.console.Cli;
 import com.dfedorino.urlshortener.ui.console.command.Command;
 import com.dfedorino.urlshortener.ui.console.command.dto.ResultWithNotification;
@@ -68,7 +68,7 @@ public final class Redirect implements Command<LinkDto> {
                     Command.SHORT_LINK_DELETED_MESSAGE.formatted(link));
         }
 
-        if (validatedLink.status() == LinkValidationService.Status.INVALID) {
+        if (validatedLink.validationStatus() == ValidationStatus.INVALID) {
             Optional<LinkDto> invalidLink = linkService.invalidateLink(
                     validatedLink.link().userId(),
                     validatedLink.link().code()

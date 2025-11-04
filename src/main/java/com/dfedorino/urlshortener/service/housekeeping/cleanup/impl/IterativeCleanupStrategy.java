@@ -6,6 +6,8 @@ import com.dfedorino.urlshortener.domain.repository.housekeeping.HousekeepingLin
 import com.dfedorino.urlshortener.service.business.LinkService;
 import com.dfedorino.urlshortener.service.housekeeping.cleanup.CleanupStrategy;
 import com.dfedorino.urlshortener.service.validation.LinkValidationService;
+import com.dfedorino.urlshortener.service.validation.ValidationStatus;
+import com.dfedorino.urlshortener.service.validation.dto.ValidatedLink;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -25,9 +27,9 @@ public class IterativeCleanupStrategy implements CleanupStrategy {
             log.info("Starting cleanup task...");
 
             for (Link link : housekeepingLinkRepository.findByStatusId(LinkStatus.ACTIVE.getId())) {
-                LinkValidationService.ValidatedLink validatedLink = linkValidationService.validate(
+                ValidatedLink validatedLink = linkValidationService.validate(
                         link);
-                if (validatedLink.status() == LinkValidationService.Status.INVALID) {
+                if (validatedLink.validationStatus() == ValidationStatus.INVALID) {
                     linkService.invalidateLink(link.getUserId(), link.getCode());
                     log.debug("Marked link as INVALID, code: {}", link.getCode());
                 }
