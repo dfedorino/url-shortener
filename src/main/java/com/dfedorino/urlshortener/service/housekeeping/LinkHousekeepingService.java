@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-// TODO: write tests!!!
 @Slf4j
 @RequiredArgsConstructor
 public class LinkHousekeepingService {

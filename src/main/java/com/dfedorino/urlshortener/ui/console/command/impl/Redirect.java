@@ -1,6 +1,7 @@
 package com.dfedorino.urlshortener.ui.console.command.impl;
 
 import com.dfedorino.urlshortener.domain.model.link.LinkDto;
+import com.dfedorino.urlshortener.domain.model.link.LinkStatus;
 import com.dfedorino.urlshortener.domain.model.user.User;
 import com.dfedorino.urlshortener.service.business.LinkService;
 import com.dfedorino.urlshortener.service.business.UserService;
@@ -16,8 +17,10 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public final class Redirect implements Command<LinkDto> {
 
@@ -59,6 +62,11 @@ public final class Redirect implements Command<LinkDto> {
         }
 
         ValidatedLink validatedLink = optionalValidatedLink.get();
+
+        if (LinkStatus.DELETED.name().equals(validatedLink.link().status())) {
+            return ResultWithNotification.ofErrorMessage(
+                    Command.SHORT_LINK_DELETED_MESSAGE.formatted(link));
+        }
 
         if (validatedLink.status() == LinkValidationService.Status.INVALID) {
             Optional<LinkDto> invalidLink = linkService.invalidateLink(

@@ -2,7 +2,9 @@ package com.dfedorino.urlshortener.ui.console.command.impl;
 
 import com.dfedorino.urlshortener.ui.console.command.Command;
 import com.dfedorino.urlshortener.ui.console.command.dto.ResultWithNotification;
+import org.springframework.stereotype.Component;
 
+@Component
 public final class Quit implements Command<Void> {
 
     public static final String KEY_TOKEN = "quit";

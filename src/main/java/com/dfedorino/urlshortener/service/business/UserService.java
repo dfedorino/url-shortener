@@ -5,9 +5,11 @@ import com.dfedorino.urlshortener.domain.repository.business.user.UserRepository
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
+@Component
 @RequiredArgsConstructor
 public class UserService {
 

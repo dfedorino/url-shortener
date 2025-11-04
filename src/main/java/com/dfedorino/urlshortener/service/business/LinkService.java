@@ -13,9 +13,11 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
+@Component
 @RequiredArgsConstructor
 public class LinkService {
 
@@ -77,7 +79,6 @@ public class LinkService {
         return updateLinkStatus(userId, code, LinkStatus.INVALID);
     }
 
-    // TODO: write test
     public Optional<LinkDto> deleteLink(@NonNull Long userId, @NonNull String code) {
         return updateLinkStatus(userId, code, LinkStatus.DELETED);
     }

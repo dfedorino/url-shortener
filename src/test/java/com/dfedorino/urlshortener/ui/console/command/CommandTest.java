@@ -31,6 +31,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.env.Environment;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
@@ -38,9 +39,11 @@ class CommandTest {
 
     private static final UserService MOCK_USER_SERVICE = mock(UserService.class);
     private static final LinkService MOCK_LINK_SERVICE = mock(LinkService.class);
+    private static final Environment MOCK_ENVIRONMENT = mock(Environment.class);
     private static final Command<LinkDto> CREATE_LINK = new CreateLink(
             MOCK_USER_SERVICE,
-            MOCK_LINK_SERVICE
+            MOCK_LINK_SERVICE,
+            MOCK_ENVIRONMENT
     );
     private static final Command<LinkDto> DELETE_LINK = new DeleteLink(
             MOCK_USER_SERVICE,

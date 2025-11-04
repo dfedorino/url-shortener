@@ -10,8 +10,11 @@ import com.dfedorino.urlshortener.ui.console.command.dto.ResultWithNotification;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class CreateLink implements Command<LinkDto> {
 
@@ -22,24 +25,31 @@ public class CreateLink implements Command<LinkDto> {
     public static final String DESCRIPTION_MESSAGE = "Shorten the given URL";
     private final UserService userService;
     private final LinkService linkService;
+    private final Environment environment;
 
     @Override
     public ResultWithNotification<LinkDto> apply(String... commandAndArgs) {
-        var firstFailedCheck = validateInOrder(List.of(
-                () -> validateArguments(args -> args.length == 3, commandAndArgs),
-                () -> validateOriginalUrl(commandAndArgs[1]),
-                () -> validateLimit(commandAndArgs[2])
+        var failedCheck = validateInOrder(List.of(
+                () -> validateArguments(args -> args.length == 2 || args.length == 3,
+                                        commandAndArgs),
+                () -> validateOriginalUrl(commandAndArgs[1])
         ));
 
-        if (firstFailedCheck.isPresent()) {
-            return firstFailedCheck.get();
+        if (failedCheck.isEmpty() && commandAndArgs.length == 3) {
+            failedCheck = validateLimit(commandAndArgs[2]);
+        }
+
+        if (failedCheck.isPresent()) {
+            return failedCheck.get();
         }
 
         Long userId = userService.find(Cli.USER_UUID.get())
                 .orElseGet(() -> userService.create(Cli.USER_UUID.get())).getId();
 
         String originalUrl = commandAndArgs[1];
-        int redirectLimit = Integer.parseInt(commandAndArgs[2]);
+        int redirectLimit = commandAndArgs.length == 2 ?
+                environment.getRequiredProperty("default-redirect-limit", Integer.class) :
+                Integer.parseInt(commandAndArgs[2]);
 
         var possibleDuplicate = linkService.findValidatedLinkByOriginalUrl(userId, originalUrl);
 

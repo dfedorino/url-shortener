@@ -12,6 +12,7 @@ public interface Command<T> {
     String COMMAND_INVALID_MESSAGE = "Command invalid, example: '%s'";
     String LIMIT_INVALID_MESSAGE = "Limit invalid: '%s'";
     String SHORT_LINK_INVALID_MESSAGE = "Short link invalid: '%s'";
+    String SHORT_LINK_DELETED_MESSAGE = "Short link deleted: '%s'";
     String URL_INVALID_MESSAGE = "URL invalid: '%s'";
     String USER_NOT_FOUND_MESSAGE = "User not found: '%s'";
     String SHORT_LINK_NOT_FOUND_MESSAGE = "Link not found: '%s'";

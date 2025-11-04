@@ -7,6 +7,7 @@ import com.dfedorino.urlshortener.domain.model.link.LinkStatus;
 import com.dfedorino.urlshortener.jdbc.util.DataUtil;
 import com.dfedorino.urlshortener.service.validation.LinkValidationService;
 import com.dfedorino.urlshortener.ui.console.Cli;
+import com.dfedorino.urlshortener.ui.console.command.Command;
 import com.dfedorino.urlshortener.ui.console.command.impl.CreateLink;
 import com.dfedorino.urlshortener.ui.console.command.impl.DeleteLink;
 import com.dfedorino.urlshortener.ui.console.command.impl.EditLinkRedirectLimit;
@@ -20,6 +21,7 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import javax.sql.DataSource;
 import lombok.extern.slf4j.Slf4j;
@@ -116,6 +118,28 @@ class IntegrationTest {
                                DeleteLink.LINK_ALREADY_DELETED.formatted(shortLink));
     }
 
+    @Test
+    void create_link_with_default_redirect_limit() {
+        int defaultRedirectLimit = ctx.getEnvironment()
+                .getRequiredProperty("default-redirect-limit", Integer.class);
+        LinkDto link = givenLinkIsCreated(TestConstants.VALID_URL);
+        assertThat(link.redirectLimit()).isEqualTo(defaultRedirectLimit);
+    }
+
+    @Test
+    void fail_when_redirect_deleted_link() {
+        LinkDto link = givenLinkIsCreated(TestConstants.VALID_URL);
+        String shortLink = Cli.SHORTENED_URL_PREFIX + link.code();
+
+        LinkDto deleted = givenLinkDeleted(shortLink);
+        assertThat(deleted.status()).isEqualTo(LinkStatus.DELETED.name());
+
+        verifyNoLinkIsVisitedWhileCalling(
+                () -> givenLinkRedirectionFailed(shortLink,
+                                                 Command.SHORT_LINK_DELETED_MESSAGE.formatted(
+                                                         shortLink)));
+    }
+
     /**
      * 2. Проверьте, что при исчерпании лимита переходов переход по ссылке блокируется. 4.1
      * Убедитесь, что пользователи получают уведомления о том, что их ссылка недоступна из-за
@@ -159,9 +183,10 @@ class IntegrationTest {
         var staleLink = verifyNoLinkIsVisitedWhileCalling(
                 () -> givenLinkRedirectionFailed(shortLink, LinkValidationService.EXPIRED)
         );
-        assertThat(staleLink.originalUrl()).isEqualTo(TestConstants.VALID_URL);
-        assertThat(staleLink.redirectLimit()).isOne();
-        assertThat(staleLink.status()).isEqualTo(LinkStatus.INVALID.name());
+        assertThat(staleLink).isNotEmpty();
+        assertThat(staleLink.get().originalUrl()).isEqualTo(TestConstants.VALID_URL);
+        assertThat(staleLink.get().redirectLimit()).isOne();
+        assertThat(staleLink.get().status()).isEqualTo(LinkStatus.INVALID.name());
     }
 
     @Test
@@ -273,6 +298,14 @@ class IntegrationTest {
         deleteLink = ctx.getBean(DeleteLink.class);
     }
 
+    private LinkDto givenLinkIsCreated(String url) {
+        var createLinkResult = createLink.apply(CreateLink.KEY_TOKEN, url);
+
+        assertThat(createLinkResult.notification()).isEqualTo(CreateLink.SUCCESS_MESSAGE);
+        assertThat(createLinkResult.result()).isNotEmpty();
+        return createLinkResult.result().get();
+    }
+
     private LinkDto givenLinkIsCreated(String url, String redirectLimit) {
         var createLinkResult = createLink.apply(CreateLink.KEY_TOKEN,
                                                 url,
@@ -292,13 +325,12 @@ class IntegrationTest {
         return redirectedLinkResult.result().get();
     }
 
-    private LinkDto givenLinkRedirectionFailed(String shortLink, String reason) {
+    private Optional<LinkDto> givenLinkRedirectionFailed(String shortLink, String reason) {
         var redirectedLinkResult = redirect.apply(Redirect.KEY_TOKEN, shortLink);
 
         assertThat(redirectedLinkResult.notification()).isEqualTo(reason);
-        assertThat(redirectedLinkResult.result()).isNotEmpty();
 
-        return redirectedLinkResult.result().get();
+        return redirectedLinkResult.result();
     }
 
     private List<LinkDto> givenActiveLinksListed() {
