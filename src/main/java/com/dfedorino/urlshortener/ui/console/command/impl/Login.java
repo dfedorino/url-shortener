@@ -1,0 +1,60 @@
+package com.dfedorino.urlshortener.ui.console.command.impl;
+
+import com.dfedorino.urlshortener.service.business.UserService;
+import com.dfedorino.urlshortener.ui.console.Cli;
+import com.dfedorino.urlshortener.ui.console.command.Command;
+import com.dfedorino.urlshortener.ui.console.command.dto.ResultWithNotification;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public final class Login implements Command<String> {
+
+    public static final String KEY_TOKEN = "login";
+    public static final String EXAMPLE_MESSAGE = KEY_TOKEN + " 8d365b32-18cb-4c82-bdc5-d9e770a6e7dd";
+    public static final String SUCCESS_MESSAGE = "Login successful!";
+    public static final String DESCRIPTION_MESSAGE = "Login with user's UUID";
+
+    private final UserService userService;
+
+    @Override
+    public ResultWithNotification<String> apply(String... commandAndArgs) {
+        var firstFailedCheck = validateInOrder(List.of(
+                () -> validateArguments(args -> args.length == 2, commandAndArgs),
+                () -> validateUuid(commandAndArgs[1])
+        ));
+
+        if (firstFailedCheck.isPresent()) {
+            return firstFailedCheck.get();
+        }
+
+        String uuid = commandAndArgs[1];
+
+        if (userService.find(uuid).isEmpty()) {
+            return ResultWithNotification.ofErrorMessage(
+                    Command.USER_NOT_FOUND_MESSAGE.formatted(uuid));
+        }
+
+        Cli.USER_UUID.set(uuid);
+        return ResultWithNotification.ofPayload(SUCCESS_MESSAGE, uuid);
+    }
+
+    @Override
+    public String key() {
+        return KEY_TOKEN;
+    }
+
+    @Override
+    public String description() {
+        return DESCRIPTION_MESSAGE;
+    }
+
+    @Override
+    public String example() {
+        return EXAMPLE_MESSAGE;
+    }
+}
