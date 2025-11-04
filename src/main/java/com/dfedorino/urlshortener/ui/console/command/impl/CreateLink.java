@@ -21,7 +21,7 @@ public class CreateLink implements Command<LinkDto> {
     public static final String KEY_TOKEN = "create";
     public static final String EXAMPLE_MESSAGE = KEY_TOKEN + " https://skillfactory.ru/ 100";
     public static final String SUCCESS_MESSAGE = "Link successfully created!";
-    public static final String DUPLICATE_MESSAGE = "Link with URL %s already exists!";
+    public static final String DUPLICATE_MESSAGE = "Link with URL %s already exists: %s!";
     public static final String DESCRIPTION_MESSAGE = "Shorten the given URL";
     private final UserService userService;
     private final LinkService linkService;
@@ -55,8 +55,9 @@ public class CreateLink implements Command<LinkDto> {
 
         if (possibleDuplicate.isPresent()
                 && possibleDuplicate.get().validationStatus() == ValidationStatus.VALID) {
+            String shortLink = Cli.SHORTENED_URL_PREFIX + possibleDuplicate.get().link().code();
             return ResultWithNotification.ofErrorMessage(
-                    CreateLink.DUPLICATE_MESSAGE.formatted(originalUrl));
+                    CreateLink.DUPLICATE_MESSAGE.formatted(originalUrl, shortLink));
         }
 
         LinkDto link = linkService.createLink(userId,

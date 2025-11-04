@@ -19,7 +19,7 @@ public class ConsoleUtils {
             log.info(">> status: {}", linkDTO.status());
             log.info(">> shortened url: {}", Cli.SHORTENED_URL_PREFIX + linkDTO.code());
             log.info(">> full url: {}", linkDTO.originalUrl());
-            log.info(">>  redirect limit: {}", linkDTO.redirectLimit());
+            log.info(">> redirect limit: {}", linkDTO.redirectLimit());
         }
 
 

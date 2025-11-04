@@ -20,7 +20,7 @@ public final class EditLinkUrl implements Command<LinkDto> {
 
     public static final String KEY_TOKEN = "edit_url";
     public static final String EXAMPLE_MESSAGE =
-            KEY_TOKEN + Cli.SHORTENED_URL_PREFIX + "AQA -url https://skillfactory.ru";
+            KEY_TOKEN + " " + Cli.SHORTENED_URL_PREFIX + "AQA -url https://skillfactory.ru";
     public static final String SUCCESS_MESSAGE = "URL successfully changed!";
     public static final String DESCRIPTION_MESSAGE = "Edit active link URL";
     private final UserService userService;

@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 public final class Login implements Command<String> {
 
     public static final String KEY_TOKEN = "login";
-    public static final String EXAMPLE_MESSAGE = KEY_TOKEN + " UUID";
+    public static final String EXAMPLE_MESSAGE = KEY_TOKEN + " 8d365b32-18cb-4c82-bdc5-d9e770a6e7dd";
     public static final String SUCCESS_MESSAGE = "Login successful!";
-    public static final String DESCRIPTION_MESSAGE = "Login with UUID";
+    public static final String DESCRIPTION_MESSAGE = "Login with user's UUID";
 
     private final UserService userService;
 
