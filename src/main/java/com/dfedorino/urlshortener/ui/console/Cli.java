@@ -1,6 +1,7 @@
 package com.dfedorino.urlshortener.ui.console;
 
 import com.dfedorino.urlshortener.domain.model.link.LinkDto;
+import com.dfedorino.urlshortener.service.business.UserService;
 import com.dfedorino.urlshortener.ui.console.command.Command;
 import com.dfedorino.urlshortener.ui.console.command.dto.ResultWithNotification;
 import com.dfedorino.urlshortener.ui.console.command.impl.Quit;
@@ -30,6 +31,7 @@ public class Cli {
     public static final String INVALID_COMMAND = "!!! Invalid command !!!";
 
     private final List<Command<?>> commands;
+    private final UserService userService;
 
     @SuppressWarnings("unchecked")
     public void start() {
@@ -38,6 +40,7 @@ public class Cli {
 
         log.info(TITLE);
         ConsoleUtils.printOutAvailableCommands(commands);
+        userService.create(USER_UUID.get());
 
         var scanner = new Scanner(System.in);
 
