@@ -122,6 +122,8 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <ossIndexUsername>${env.OSS_INDEX_USERNAME}</ossIndexUsername>
+                    <ossIndexPassword>${env.OSS_INDEX_PASSWORD}</ossIndexPassword>
                     <nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
                     <failBuildOnCVSS>7</failBuildOnCVSS>
                     <assemblyAnalyzerEnabled>true</assemblyAnalyzerEnabled>
