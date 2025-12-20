@@ -201,7 +201,7 @@
                 <groupId>org.springframework</groupId>
                 <scope>import</scope>
                 <type>pom</type>
-                <version>6.2.6</version>
+                <version>6.2.15</version>
             </dependency>
             <dependency>
                 <artifactId>mockito-bom</artifactId>
