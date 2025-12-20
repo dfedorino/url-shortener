@@ -110,6 +110,27 @@
                     <verbose>false</verbose><!-- = ${cyclonedx.verbose} -->
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>12.1.9</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
+                    <failBuildOnCVSS>0</failBuildOnCVSS>
+                    <assemblyAnalyzerEnabled>true</assemblyAnalyzerEnabled>
+                    <jarAnalyzerEnabled>true</jarAnalyzerEnabled>
+                    <mavenInstallAnalyzerEnabled>true</mavenInstallAnalyzerEnabled>
+                    <suppressionFiles><!-- make sure none suppresses Spring -->
+                    </suppressionFiles>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
