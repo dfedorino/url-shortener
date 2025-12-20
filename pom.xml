@@ -123,7 +123,7 @@
                 </executions>
                 <configuration>
                     <nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
-                    <failBuildOnCVSS>0</failBuildOnCVSS>
+                    <failBuildOnCVSS>7</failBuildOnCVSS>
                     <assemblyAnalyzerEnabled>true</assemblyAnalyzerEnabled>
                     <jarAnalyzerEnabled>true</jarAnalyzerEnabled>
                     <mavenInstallAnalyzerEnabled>true</mavenInstallAnalyzerEnabled>
